@@ -1,13 +1,13 @@
 package com.example.steve.weathersunshine;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.steve.weathersunshine.data.WeatherOneDay;
+import com.example.steve.weathersunshine.model.WeatherOneDay;
+import com.example.steve.weathersunshine.util.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,8 +25,9 @@ public class FetchWeatherAsynTask extends AsyncTask<String, Void, ArrayList<Weat
     @Override
     protected void onPostExecute(ArrayList<WeatherOneDay> arrayWeather) {
         super.onPostExecute(arrayWeather);
-        Context context=MyActivity.getContext();
-        Activity activity= (Activity)context;
+        Context context= MainActivity.getContext();
+        MainActivity  activity= (MainActivity)context;
+        activity.setArrayWeather(arrayWeather);
         int len=arrayWeather.size();
         String strs[]= new String[len];
 
@@ -35,7 +36,7 @@ public class FetchWeatherAsynTask extends AsyncTask<String, Void, ArrayList<Weat
             StringBuffer sb= new StringBuffer();
             WeatherOneDay w= arrayWeather.get(i);
 //            sb.append(w.getDate().getMonth()+","+w.getDate().getDay()+":");
-            sb.append(w.getMonth()+" "+w.getDay()+":");
+            sb.append(w.getMonth()+w.getDay()+":");
             sb.append(w.getWeatherMain()+",");
             sb.append("max:"+w.getTempMax()+",");
             sb.append("min:"+w.getTempMin());

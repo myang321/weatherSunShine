@@ -2,35 +2,61 @@ package com.example.steve.weathersunshine;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.example.steve.weathersunshine.model.WeatherOneDay;
+
+import java.util.ArrayList;
 
 
-public class MyActivity extends Activity {
+public class MainActivity extends Activity {
 
 
     private ArrayAdapter adpter;
     public static Context context;
+    ArrayList<WeatherOneDay> arrayWeather=null;
+
+
     public static Context getContext() {
         return context;
     }
+
+    public void setArrayWeather(ArrayList<WeatherOneDay> arrayWeather) {
+        this.arrayWeather = arrayWeather;
+    }
+
+    public ArrayList<WeatherOneDay> getArrayWeather() {
+
+        return arrayWeather;
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.context=this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-//        String strs[]={"haha","huhu"};
-//        ArrayList<String> array= new ArrayList<String>(Arrays.asList(strs));
-//        adpter=new ArrayAdapter(this,R.layout.list_item,R.id.textView1,array);
-//        ListView lv1=(ListView)findViewById(R.id.listview1);
-//        lv1.setAdapter(adpter);
-
         FetchWeatherAsynTask f= new FetchWeatherAsynTask();
         String s="85281";
         f.execute(s);
-        //Toast.makeText(context, "haha", Toast.LENGTH_LONG).show();
+        ListView list = (ListView) findViewById(R.id.listview1);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                //Toast.makeText(getApplicationContext(), "CLICKED no:"+position, Toast.LENGTH_SHORT).show();
+                Intent intent= new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("weather",arrayWeather.get(position));
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
